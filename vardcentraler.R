@@ -5,7 +5,7 @@ library(dplyr)
 library(tidyverse)
 
 #SWEREF 
-vardcentraler <- st_as_sf(Utbudspunkter_kopia,
+vardcentraler <- st_as_sf(Utbudspunkter,
                           coords = c("Sweref99Y", "Sweref99X"),
                           crs = 3006)
 
@@ -61,7 +61,15 @@ summary_data_kom <- joined_data_kom %>%
 # Add the point count data to the polygons layer
 kommun_sum_vardcent <- st_join(kommun, summary_data_kom, by = c("kommun" = "kommun"))
 
-mapview(vardcentraler_endast, label = "Populärnamn", layer.name = "Vardcentraler", homebutton = FALSE, legend = FALSE)+
-  mapview(regso_dalarna_sum_vardcent, zcol = "kommun", legend = FALSE, hide = TRUE, alpha.regions = 0.5, homebutton = FALSE, layer.name = "regso")+
-  mapview(kommun_sum_vardcent, label = "kommunnamn", alpha.regions = 0, homebutton = FALSE, legend = FALSE, layer.name = "kommun")
+#joina kluster
+
+regso_dalarna_sum_vardcent <- regso_dalarna_sum_vardcent %>% 
+  rename(region_kod = regsokod)
+
+regso_kluster <- left_join(regso_dalarna_sum_vardcent, X3kluster)
+
+mapview(vardcentraler_endast, label = "Populärnamn", layer.name = "Vardcentraler", homebutton = FALSE, legend = FALSE, hide = TRUE)+
+  mapview(regso_dalarna_sum_vardcent, zcol = "kommun", legend = FALSE, hide = TRUE, alpha.regions = 0.5, homebutton = FALSE, layer.name = "regso", label = "regso")+
+  mapview(kommun_sum_vardcent, label = "kommunnamn", alpha.regions = 0, homebutton = FALSE, legend = FALSE, layer.name = "kommun", hide = TRUE)+
+  mapview(regso_kluster, zcol = "cmember", homebutton = FALSE, legend = FALSE)
 
