@@ -66,10 +66,10 @@ kommun_sum_vardcent <- st_join(kommun, summary_data_kom, by = c("kommun" = "komm
 regso_dalarna_sum_vardcent <- regso_dalarna_sum_vardcent %>% 
   rename(region_kod = regsokod)
 
-regso_kluster <- left_join(regso_dalarna_sum_vardcent, X3kluster)
+regso_kluster <- left_join(regso_dalarna_sum_vardcent, X3kluster_namn)
 
 mapview(vardcentraler_endast, label = "Populärnamn", layer.name = "Vardcentraler", homebutton = FALSE, legend = FALSE, hide = TRUE)+
   mapview(regso_dalarna_sum_vardcent, zcol = "kommun", legend = FALSE, hide = TRUE, alpha.regions = 0.5, homebutton = FALSE, layer.name = "regso", label = "regso")+
   mapview(kommun_sum_vardcent, label = "kommunnamn", alpha.regions = 0, homebutton = FALSE, legend = FALSE, layer.name = "kommun", hide = TRUE)+
-  mapview(regso_kluster, zcol = "cmember", homebutton = FALSE, legend = FALSE)
+  mapview(regso_kluster, zcol = "cmember", label = "regso_kluster", homebutton = FALSE, legend = FALSE)
 
