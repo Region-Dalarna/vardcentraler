@@ -3,7 +3,7 @@ library(sf)
 library(mapview)
 library(dplyr)
 library(tidyverse)
-
+ 
 #SWEREF 
 vardcentraler <- st_as_sf(Utbudspunkter,
                           coords = c("Sweref99Y", "Sweref99X"),
