@@ -3,20 +3,34 @@ library(sf)
 library(mapview)
 library(dplyr)
 library(tidyverse)
- 
-#SWEREF 
-vardcentraler <- st_as_sf(Utbudspunkter,
+
+#Hämta vårdcentraler
+
+utbudspunkter_fil <- "G:/skript/henrik/GitHub/Region-Atlas/vardcentraler/Utbudspunkter.xlsx" #denna fil är uppdaterad från orginalet med samma namn
+  
+utbudspunkter <- read_excel(utbudspunkter_fil)
+
+vardcentraler <- st_as_sf(utbudspunkter,
                           coords = c("Sweref99Y", "Sweref99X"),
                           crs = 3006)
+
+# mapview(vardcentraler)+
+#   mapview(regso_dalarna)
 
 #hämta Regso från G:\Samhällsanalys\GIS\grundkartor\regso
 
 regso_fil <- "G:/Samhällsanalys/GIS/grundkartor/regso/RegSO_2018_v1.gpkg"
-regso <- st_read(regso_fil, crs = 3006) 
+regso <- st_read(regso_fil, crs = 3006)
+
+mapview(regso)
+
+#Skapa ny variabel länskod för att filtrera ut Dalarna
 
 regso_dalarna <- regso %>%
   mutate(lan_kod = substr(kommun, 1, 2)) %>%
   filter(lan_kod == "20")
+
+# mapview(regso_dalarna)
 
 # Lägger till en col med id
 regso_dalarna_id <- regso_dalarna %>%
